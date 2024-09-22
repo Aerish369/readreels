@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 
 
@@ -7,13 +7,27 @@ from django.core.validators import MinValueValidator, MaxValueValidator, RegexVa
 
 class Collection(models.Model):
     name = models.CharField(max_length=255)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     book = models.ManyToManyField('Book', related_name='collections')
     is_public = models.BooleanField(default=True)   
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return self.name
+
+
+class Profile(models.Model):
+    birth_date = models.DateField(null=True, blank=True)
+    bio = models.TextField()
+    profile_image = models.ImageField(upload_to='users/images', blank=True, default='')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.user.first_name + ' ' + self.user.last_name
+    
+    class Meta:
+        ordering = ['user__first_name', 'user__last_name']
 
 
 
@@ -44,7 +58,7 @@ class Book(models.Model):
 
 class Review(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     review = models.TextField()
     rating = models.IntegerField(
         validators=[
