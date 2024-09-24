@@ -17,6 +17,10 @@ class Collection(models.Model):
 
 
 class Profile(models.Model):
+    username = models.CharField(max_length=255, unique=True)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
     birth_date = models.DateField(null=True, blank=True)
     bio = models.TextField()
     profile_image = models.ImageField(upload_to='users/images', blank=True, default='')
