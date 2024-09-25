@@ -20,7 +20,7 @@ class CustomLogoutView(LogoutView):
     next_page = reverse_lazy('login')
 
 
-class SignUpView(SuccessMessageMixin, CreateView):
+class RegisterUser(SuccessMessageMixin, CreateView):
     '''View for signing up a new user.'''
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('home') #! Later redirect to profile page
