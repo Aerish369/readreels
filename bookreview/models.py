@@ -17,10 +17,6 @@ class Collection(models.Model):
 
 
 class Profile(models.Model):
-    username = models.CharField(max_length=255, unique=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField()
     birth_date = models.DateField(null=True, blank=True)
     bio = models.TextField()
     profile_image = models.ImageField(upload_to='users/images', blank=True, default='')
@@ -32,6 +28,22 @@ class Profile(models.Model):
     
     class Meta:
         ordering = ['user__first_name', 'user__last_name']
+
+    @property
+    def username(self):
+        return self.user.username
+    
+    @property
+    def first_name(self):
+        return self.user.first_name
+    
+    @property
+    def last_name(self):
+        return self.user.last_name
+    
+    @property 
+    def email(self):
+        return self.user.email
 
 
 

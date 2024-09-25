@@ -1,10 +1,8 @@
-from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth import login as auth_login
-from django.http import HttpResponseRedirect
 from django.contrib.auth import login
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.shortcuts import render
 from django.views.generic import CreateView
 
 from .forms import CustomUserCreationForm
