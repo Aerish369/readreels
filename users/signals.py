@@ -8,11 +8,11 @@ Profile = apps.get_model('bookreview', 'Profile')
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def createProfile(sender, instance, created, **kwargs):
-    '''Creates profile when use is created
+    '''Creates profile when user is created
        Sends welcome email to the email of created user. '''
     Profile = apps.get_model('bookreview', 'Profile')
-    subject = 'Welcome to ReadReels'
-    message = 'You are registered in readreels. Thank you'
+    
+    profile = None
 
     if created: 
         user = instance
@@ -20,13 +20,16 @@ def createProfile(sender, instance, created, **kwargs):
             user = instance,
         )
 
-    send_mail (
-        subject,
-        message,
-        settings.EMAIL_HOST_USER,
-        [profile.user.email],
-        fail_silently=False
-    )
+        subject = 'Welcome to ReadReels'
+        message = 'You are registered in readreels. Thank you'
+
+        send_mail (
+            subject,
+            message,
+            settings.EMAIL_HOST_USER,
+            [profile.user.email],
+            fail_silently=False
+        )
 
 
 @receiver(post_delete, sender=Profile)
