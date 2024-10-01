@@ -23,12 +23,12 @@ class CustomLogoutView(LogoutView):
 class RegisterUser(SuccessMessageMixin, CreateView):
     '''View for signing up a new user.'''
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy('home') #! Later redirect to profile page
+    success_url = reverse_lazy('profile') #! Later redirect to profile page
     template_name = 'registration/register.html'
     success_message = "Your profile was created successfully"
 
     def form_valid(self, form):
-        '''If the form is valid, save the associated model.'''
+        '''If the form is valid, save the associated model. Logs in the signed up user.'''
         response = super().form_valid(form)
         login(self.request, self.object)
         return response

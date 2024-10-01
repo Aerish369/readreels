@@ -3,6 +3,7 @@
 {% block content %}
 
     <h2>Login</h2>
+    <hr>
 
     <form method="post">
         {% csrf_token %}
@@ -10,9 +11,12 @@
         <button type="submit">Login</button>
     </form>
 
+    <br>
     <p>Forgot Password?</p>
-    <hr>
     <a href="{% url 'reset_password' %}">Click Here</a>
+    <hr>
     
+    <p>No account?</p>
+    <a href="{% url 'register' %}">Register Here</a>
     
 {% endblock %}
