@@ -23,7 +23,7 @@ class CustomLogoutView(LogoutView):
 class RegisterUser(SuccessMessageMixin, CreateView):
     '''View for signing up a new user.'''
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy('profile') #! Later redirect to profile page
+    success_url = reverse_lazy('profile-edit') #! Later redirect to profile page
     template_name = 'registration/register.html'
     success_message = "Your profile was created successfully"
 
