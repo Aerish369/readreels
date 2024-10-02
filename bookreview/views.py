@@ -2,12 +2,11 @@ from typing import Any
 from django.contrib.auth.views import RedirectURLMixin
 from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.generic import ListView, CreateView, UpdateView
 from django.urls import reverse_lazy
 from .models import Book, Profile
-from .forms import ProfileForm
-from users.forms import CustomUserCreationForm
+from .forms import ProfileForm, UserProfileForm
 from django.conf import settings
 
 
@@ -31,25 +30,27 @@ def home(request):
 
 class ProfileView(UpdateView):
     model = Profile
-    fields = ['birth_date', 'bio', 'profile_image']
+    form_class = ProfileForm
     template_name = 'bookreview/profile.html'
     success_url = reverse_lazy('home')
 
     def get_object(self, queryset=None):
         return self.request.user.profile 
     
-    # def post(self, *args, **kwargs):
-    #     User = settings.AUTH_USER_MODEL
-    #     form = CustomUserCreationForm(self.request.POST, instance=User.objects.get(id=self.request.user.id))
-    #     if form.is_valid():
-    #         return self.form_valid(form)
-    
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-
-        context['first_name'] = self.request.user.first_name
-        context['last_name'] = self.request.user.last_name
-        context['username'] = self.request.user.username
-        context['email'] = self.request.user.email
-
+        context['user_form'] = UserProfileForm(instance=self.request.user)
+        context['profile_form'] = self.get_form()
         return context
+    
+    def post(self, request, *args, **kwargs):
+        user_form = UserProfileForm(request.POST, instance=self.request.user)
+        profile_form = ProfileForm(request.POST, instance=self.get_object())
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+
+            return redirect(self.success_url)
+        
+        return self.get(request, *args, **kwargs)
