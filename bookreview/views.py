@@ -3,19 +3,45 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
 from django.shortcuts import redirect, render
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DetailView
 from django.urls import reverse_lazy
-from .models import Book, Profile
-from .forms import ProfileForm, UserProfileForm
+from .models import Book, Profile, Review
+from .forms import ProfileForm, UserProfileForm, ReviewForm
 from django.conf import settings
 
 
-def home(request):
-    books = Book.objects.all()
-    context = {
-        'books':books,
-    }
-    return render(request, "bookreview/home.html", context)
+
+class HomeView(ListView):
+    model = Book
+    template_name = 'bookreview/home.html'
+    context_object_name = 'books'
+
+
+class BookDetailView(LoginRequiredMixin, DetailView):
+    model = Book
+    template_name = 'bookreview/book_detail.html'
+    login_url = reverse_lazy('login')
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        book = self.object
+        context['reviews'] = Review.objects.filter(book=book)
+        context['review_form'] = ReviewForm
+        return context
+
+    def post(self, request, *args, **kwargs):
+        book = self.get_object()
+        user = self.request.user
+        review_form = ReviewForm(request.POST)
+        if review_form.is_valid():
+            review = review_form.save(commit=False)
+            review.reviewer = user
+            review.book = book
+            review.save()
+        else:
+            context = self.get_context_data(**kwargs)
+            context['review_form'] = review_form
+            return self.render_to_response(context)
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):

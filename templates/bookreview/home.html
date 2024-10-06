@@ -4,9 +4,14 @@
     <h2>Home</h2>
 
     <p>Logged in as {{request.user}}</p>
+    <hr>
+    <br>
 
-    {% for book in queryset %}
-        <h5>{{book.title}}</h5>
+    <h3>Books</h3>
+    <hr>
+    {% for book in books %}
+        <h5><a href="{% url 'book-detail' book.slug %}">{{book.title}}</a></h5>
+        <hr>
     {% endfor %}
 
     {% if request.user.is_authenticated == True %}
