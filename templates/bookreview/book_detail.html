@@ -2,30 +2,74 @@
 
 {% block content %}
 
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <img src="{{ book.cover_image.url }}" alt="Cover of {{ book.title }}" class="img-fluid" style="max-height: 300px; max-width: 100%;">
+            </div>
+            <div class="col-md-8">
+                <h1 class="card-title">{{ book.title }}</h1>
+                <h4 class="card-subtitle mb-2 text-muted">{{ book.author }}</h4>
+                <hr>
 
-<div id="book-card">
-    <h1>{{book.title}}</h1>
-    <br>
-    <h4>{{book.author}}</h4>
-    <br><hr>
+                <h2>Reviews</h2><br>
+                <form method="POST" class="form-inline mb-4" id="review-form">
+                    {% csrf_token %}
+                    
+                    <!-- Star Rating -->
+                    <div class="form-group mr-2">
+                        <div class="star-rating d-flex">
+                            <input type="radio" name="rating" id="star1" value="1" {% if review_form.rating.value == 1 %}checked{% endif %} />
+                            <label for="star1" title="1 star">&#9733;</label>
+                            <input type="radio" name="rating" id="star2" value="2" {% if review_form.rating.value == 2 %}checked{% endif %} />
+                            <label for="star2" title="2 stars">&#9733;</label>
+                            <input type="radio" name="rating" id="star3" value="3" {% if review_form.rating.value == 3 %}checked{% endif %} />
+                            <label for="star3" title="3 stars">&#9733;</label>
+                            <input type="radio" name="rating" id="star4" value="4" {% if review_form.rating.value == 4 %}checked{% endif %} />
+                            <label for="star4" title="4 stars">&#9733;</label>
+                            <input type="radio" name="rating" id="star5" value="5" {% if review_form.rating.value == 5 %}checked{% endif %} />
+                            <label for="star5" title="5 stars">&#9733;</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Textarea -->
+                    <div class="form-group mr-2">
+                        <textarea name="review" class="form-control" placeholder="Write your review.." required>{{ review_form.review.value }}</textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        {% if is_reviewed %}
+                            Update Review
+                        {% else %}
+                            Submit Review
+                        {% endif %}
+                    </button>
 
-    <h2>Reviews</h2><br>
-    <form method="POST">
-        {% csrf_token %}
-        {{review_form.as_p}}
-        <button type="submit">Submit</button>
-    </form>
-    {% for review in reviews %}
-    <span>{{review.reviewer}}</span>
-    <h5>{{review.rating}}/5</h5>
-    <p>{{review.review}}</p>
-    
-    <p>{{review.review_date}}</p>
-    <hr>
-    {% endfor %}
+                </form>
+                {% if is_reviewed %}
+                    <form method="POST" action="{% url 'delete_review' book.pk %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete Review</button>
+                    </form>
+                    {% endif %}
+
+                <h3>User Reviews</h3>
+                {% if reviews %}
+                    {% for review in reviews %}
+                        <div class="border p-3 mb-3{% if review.reviewer == user.username %} bg-info text-white{% endif %}">
+                            <span class="font-weight-bold">{{ review.reviewer }}</span>
+                            <h5 class="mt-2">{{ review.rating }}/5</h5>
+                            <p>{{ review.review }}</p>
+                            <p class="text-muted">{{ review.review_date }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">No reviews yet. Be the first to review!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
-
-
-
 
 {% endblock %}

@@ -1,13 +1,12 @@
 from typing import Any
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models.query import QuerySet
-from django.forms.models import BaseModelForm
-from django.shortcuts import redirect, render
-from django.views.generic import ListView, CreateView, UpdateView, DetailView
-from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
+from django.urls import reverse_lazy, reverse
 from .models import Book, Profile, Review
 from .forms import ProfileForm, UserProfileForm, ReviewForm
-from django.conf import settings
 
 
 
@@ -17,31 +16,59 @@ class HomeView(ListView):
     context_object_name = 'books'
 
 
-class BookDetailView(LoginRequiredMixin, DetailView):
+class BookDetailView(LoginRequiredMixin, DetailView, UpdateView):
     model = Book
     template_name = 'bookreview/book_detail.html'
     login_url = reverse_lazy('login')
 
+    form_class = ReviewForm
+
+
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         book = self.object
+
+        user_review = Review.objects.filter(book=book, reviewer=self.request.user).first()
+
+        if user_review:
+            context['review_form'] = ReviewForm(instance=user_review)
+            context['is_reviewed'] = True
+        else:
+            context['review_form'] = ReviewForm
+            context['is_reviewed'] = False
         context['reviews'] = Review.objects.filter(book=book)
-        context['review_form'] = ReviewForm
         return context
+            
 
     def post(self, request, *args, **kwargs):
         book = self.get_object()
         user = self.request.user
-        review_form = ReviewForm(request.POST)
+
+        user_review = Review.objects.filter(book=book, reviewer=self.request.user).first()
+
+        if user_review:
+            review_form = ReviewForm(request.POST, instance=user_review)
+        else:
+            review_form = ReviewForm(request.POST)
+
         if review_form.is_valid():
             review = review_form.save(commit=False)
             review.reviewer = user
             review.book = book
             review.save()
-        else:
-            context = self.get_context_data(**kwargs)
-            context['review_form'] = review_form
-            return self.render_to_response(context)
+            return redirect(request.path)
+        context = self.get_context_data(**kwargs)
+        context['review_form'] = review_form  
+        return self.render_to_response(context)
+    
+@login_required
+def delete_review(request, pk):
+    book = get_object_or_404(Book, id=pk)
+    review = Review.objects.get(book=book, reviewer=request.user)
+
+    if request.method == 'POST':
+        review.delete()
+    return HttpResponseRedirect(reverse('book-detail', kwargs={'pk': book.id}))
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):

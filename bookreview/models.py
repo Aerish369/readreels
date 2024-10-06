@@ -83,8 +83,11 @@ class Review(models.Model):
             ])
     review_date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('book', 'reviewer')
+
     def __str__(self) -> str:
-        return f'{self.reviewer} - {self.book} - {self.rating}'
+        return f'{self.reviewer} - {self.book}'
 
 
 
