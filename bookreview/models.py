@@ -85,6 +85,7 @@ class Review(models.Model):
     review_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        ordering = ['review_date']
         unique_together = ('book', 'reviewer')
 
     def __str__(self) -> str:
