@@ -6,6 +6,10 @@ from django.conf.urls.static import static
 from bookreview import urls as bookreview_urls
 from users import urls as users_urls
 
+admin.site.site_header = 'ReadReels'
+admin.site.index_title = 'Admin'
+
+
 urlpatterns = [
 
     path('admin/', admin.site.urls),

@@ -1,27 +1,70 @@
 from django.contrib import admin
-from .models import Author, Book, Collection, Review, Tag, Profile
+from django.db.models.aggregates import Count
+from django.db.models.query import QuerySet
+from django.http import HttpRequest
+from . import models
 
 
-admin.site.register(Profile)
-admin.site.register(Collection)
-admin.site.register(Review)
 
-@admin.register(Book)
+@admin.register(models.Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['username', 'first_name', 'last_name', 'email', 'reviewed_count', 'created_at']
+    list_per_page = 50
+    list_select_related = ['user']
+    ordering = ['user__username', 'user__first_name', 'user__last_name']
+    search_fields = ['user__username__istartswith', 'user__first_name__istartswith', 'user__last_name__istartswith']
+
+    def reviewed_count(self, profile):
+        return profile.user.review_set.count()
+ 
+
+@admin.register(models.Author)
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    list_per_page = 50
+    search_fields = ['name__istartswith']
+    ordering = ['name']
+
+
+@admin.register(models.Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'tag', 'isbn', 'publication_date'] 
+    list_display = ['title', 'author', 'tag', 'review_count', 'isbn', 'publication_date'] 
     list_per_page = 50 
     list_select_related = ['author', 'tag'] 
     ordering = ['title', 'author']
+    search_fields = ['title__istartswith']
     prepopulated_fields = {
         'slug': ['title']
     }
 
-@admin.register(Author)
-class AuthorAdmin(admin.ModelAdmin):
-    pass
+    @admin.display(ordering='review_count')
+    def review_count(self, book):
+        return book.review_set.count()
 
-@admin.register(Tag)
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(
+            review_count= Count('review')
+        )
+
+
+@admin.register(models.Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ['reviewer', 'reviewed_book', 'rating', 'review_date']
+    list_per_page = 50
+
+    @admin.display(ordering='reviewed_book')
+    def reviewed_book(self, review):
+        return review.book.title
+
+
+@admin.register(models.Collection)
+class CollectionAdmin(admin.ModelAdmin):
+    list_display = ['name', 'is_public', 'created_date']
+
+
+@admin.register(models.Tag)
 class TagAdmin(admin.ModelAdmin):
+    list_display = ['tag']
     prepopulated_fields = {
         'slug': ['tag']
     }
