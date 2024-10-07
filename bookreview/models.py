@@ -66,6 +66,7 @@ class Book(models.Model):
         )
     description = models.TextField()
     cover_image = models.ImageField(upload_to='bookreview/images', blank=True, default='')
+    tag = models.ForeignKey('Tag', on_delete=models.SET_NULL, null=True, related_name='books')
 
     def __str__(self) -> str:
         return f'{self.title[:100]} - {self.author}'
@@ -94,7 +95,6 @@ class Review(models.Model):
 class Tag(models.Model):
     tag = models.CharField(max_length=155)
     slug = models.SlugField(unique=True, max_length=50)
-    book = models.ManyToManyField(Book, related_name='tags', null=True)
 
     def __str__(self) -> str:
         return self.tag

@@ -16,6 +16,7 @@ class HomeView(ListView):
     context_object_name = 'books'
 
 
+
 class BookDetailView(LoginRequiredMixin, DetailView, UpdateView):
     model = Book
     template_name = 'bookreview/book_detail.html'
@@ -60,8 +61,9 @@ class BookDetailView(LoginRequiredMixin, DetailView, UpdateView):
         context = self.get_context_data(**kwargs)
         context['review_form'] = review_form  
         return self.render_to_response(context)
-    
-    
+
+
+
 @login_required
 def delete_review(request, pk):
     book = get_object_or_404(Book, id=pk)
@@ -70,6 +72,7 @@ def delete_review(request, pk):
     if request.method == 'POST':
         review.delete()
     return HttpResponseRedirect(reverse('book-detail', kwargs={'pk': book.id}))
+
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):
