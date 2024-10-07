@@ -94,7 +94,7 @@ class Review(models.Model):
 class Tag(models.Model):
     tag = models.CharField(max_length=155)
     slug = models.SlugField(unique=True, max_length=50)
-    book = models.ManyToManyField(Book, related_name='tags')
+    book = models.ManyToManyField(Book, related_name='tags', null=True)
 
     def __str__(self) -> str:
         return self.tag

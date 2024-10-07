@@ -61,6 +61,7 @@ class BookDetailView(LoginRequiredMixin, DetailView, UpdateView):
         context['review_form'] = review_form  
         return self.render_to_response(context)
     
+    
 @login_required
 def delete_review(request, pk):
     book = get_object_or_404(Book, id=pk)
