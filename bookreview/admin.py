@@ -8,10 +8,10 @@ admin.site.register(Review)
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    # list_display = ['title', 'author', 'tag', 'isbn', 'publication_date'] 
-    # list_per_page = 50 
-    # list_select_related = ['author', 'tag'] 
-    # ordering = ['title', 'author']
+    list_display = ['title', 'author', 'tag', 'isbn', 'publication_date'] 
+    list_per_page = 50 
+    list_select_related = ['author', 'tag'] 
+    ordering = ['title', 'author']
     prepopulated_fields = {
         'slug': ['title']
     }
