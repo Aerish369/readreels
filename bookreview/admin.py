@@ -9,7 +9,7 @@ from . import models
 @admin.register(models.Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ['username', 'first_name', 'last_name', 'email', 'reviewed_count', 'created_at']
-    list_per_page = 50
+    list_per_page = 20
     list_select_related = ['user']
     ordering = ['user__username', 'user__first_name', 'user__last_name']
     search_fields = ['user__username__istartswith', 'user__first_name__istartswith', 'user__last_name__istartswith']
@@ -21,7 +21,7 @@ class ProfileAdmin(admin.ModelAdmin):
 @admin.register(models.Author)
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ['name']
-    list_per_page = 50
+    list_per_page = 20
     search_fields = ['name__istartswith']
     ordering = ['name']
 
@@ -29,7 +29,7 @@ class AuthorAdmin(admin.ModelAdmin):
 @admin.register(models.Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ['title', 'author', 'tag', 'review_count', 'isbn', 'publication_date'] 
-    list_per_page = 50 
+    list_per_page = 20
     list_select_related = ['author', 'tag'] 
     ordering = ['title', 'author']
     search_fields = ['title__istartswith']
@@ -50,7 +50,7 @@ class BookAdmin(admin.ModelAdmin):
 @admin.register(models.Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ['reviewer', 'reviewed_book', 'rating', 'review_date']
-    list_per_page = 50
+    list_per_page = 20
 
     @admin.display(ordering='reviewed_book')
     def reviewed_book(self, review):
