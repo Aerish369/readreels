@@ -1,10 +1,11 @@
-from typing import Any
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect
-from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView, UpdateView, DetailView
+from typing import Any
+
 from .models import Book, Profile, Review
 from .forms import ProfileForm, UserProfileForm, ReviewForm
 

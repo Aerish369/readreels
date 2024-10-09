@@ -3,6 +3,7 @@
 {% block content %}
 
 <div class="card mb-4">
+    
     <div class="card-body">
         <div class="row">
             <div class="col-md-4 text-center">
@@ -12,6 +13,18 @@
                 <h1 class="card-title">{{ book.title }}</h1>
                 <h4 class="card-subtitle mb-2 text-muted">{{ book.author }}</h4>
                 <hr>
+                
+                <!-- Tag Styling -->
+                <h4 class="card-subtitle mb-2">
+                    <span class="badge badge-info py-2 px-3" style="font-size: 1.1rem;">{{ book.tag }}</span>
+                </h4>
+                <hr>
+
+                <!-- Save Book Button -->
+                <form method="POST" action="{% url 'save-book' book.pk %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary mb-3">Save Book</button>
+                </form>
 
                 <h2>Reviews</h2><br>
                 <form method="POST" class="form-inline mb-4" id="review-form">
@@ -45,14 +58,14 @@
                             Submit Review
                         {% endif %}
                     </button>
-
                 </form>
+                
                 {% if is_reviewed %}
-                    <form method="POST" action="{% url 'delete_review' book.pk %}" style="display:inline;">
+                    <form method="POST" action="{% url 'delete-review' book.pk %}" style="display:inline;">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger">Delete Review</button>
                     </form>
-                    {% endif %}
+                {% endif %}
 
                 <h3>User Reviews</h3>
                 {% if reviews %}
@@ -73,3 +86,4 @@
 </div>
 
 {% endblock %}
+
