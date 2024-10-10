@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, UpdateView, DetailView
@@ -72,6 +72,15 @@ def delete_review(request, pk):
 
     if request.method == 'POST':
         review.delete()
+    return HttpResponseRedirect(reverse('book-detail', kwargs={'pk': book.id}))
+
+@login_required
+def save_book(request, pk):
+    book = get_object_or_404(Book, id=pk)
+
+    if request.method == 'POST':
+        book_id = book.id
+        book
     return HttpResponseRedirect(reverse('book-detail', kwargs={'pk': book.id}))
 
 

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Collection</h2>
+
+    <p>Logged in as {{request.user}}</p>
+    <hr>
+    <br>
+
+    <h3>Your Collection</h3>
+    <hr>
+    {% for book in books %}
+        <h5><a href="{% url 'book-detail' book.id %}">{{book.title}}</a></h5>
+        <hr>
+    {% endfor %}
+
+  
+    
+
+{% endblock %}

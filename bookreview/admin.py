@@ -55,9 +55,9 @@ class ReviewAdmin(admin.ModelAdmin):
         return review.book.title
 
 
-@admin.register(models.Collection)
-class CollectionAdmin(admin.ModelAdmin):
-    list_display = ['name', 'is_public', 'created_date']
+# @admin.register(models.Collection)
+# class CollectionAdmin(admin.ModelAdmin):
+#     list_display = ['name', 'created_date']
 
 
 @admin.register(models.Tag)

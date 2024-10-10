@@ -4,18 +4,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator, RegexVa
 
 
 
-
-class Collection(models.Model):
-    name = models.CharField(max_length=255)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    book = models.ManyToManyField('Book', related_name='collections')
-    is_public = models.BooleanField(default=True)   
-    created_date = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self) -> str:
-        return self.name
-
-
 class Profile(models.Model):
     birth_date = models.DateField(null=True, blank=True)
     bio = models.TextField()
@@ -62,6 +50,7 @@ class Book(models.Model):
         validators=[RegexValidator(r'^\d{13}$', message='ISBN must be 13 digits long')]
         )
     description = models.TextField()
+    saved_by = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='saved_books')
     cover_image = models.ImageField(upload_to='bookreview/images', blank=True, default='')
     tag = models.ForeignKey('Tag', on_delete=models.SET_NULL, null=True, related_name='books')
 
