@@ -1,9 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, get_object_or_404, render
+from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, UpdateView, DetailView
+from django.views.generic import ListView, UpdateView, DetailView, View
 from typing import Any
 
 from .models import Book, Profile, Review
@@ -25,11 +24,9 @@ class BookDetailView(LoginRequiredMixin, DetailView, UpdateView):
 
     form_class = ReviewForm
 
-
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         book = self.object
-
         user_review = Review.objects.filter(book=book, reviewer=self.request.user).first()
 
         if user_review:
@@ -39,6 +36,7 @@ class BookDetailView(LoginRequiredMixin, DetailView, UpdateView):
             context['review_form'] = ReviewForm
             context['is_reviewed'] = False
         context['reviews'] = Review.objects.filter(book=book)
+        context['is_saved'] = book.saved_by.filter(id=self.request.user.id).exists()
         return context
             
 
@@ -65,23 +63,29 @@ class BookDetailView(LoginRequiredMixin, DetailView, UpdateView):
 
 
 
-@login_required
-def delete_review(request, pk):
-    book = get_object_or_404(Book, id=pk)
-    review = Review.objects.get(book=book, reviewer=request.user)
+class DeleteReviewView(LoginRequiredMixin, View):
+    login_url = reverse_lazy('login')
 
-    if request.method == 'POST':
+    def post(self, request, pk):
+        book = get_object_or_404(Book, id=pk)
+        review = Review.objects.get(book=book, reviewer=request.user)
         review.delete()
-    return HttpResponseRedirect(reverse('book-detail', kwargs={'pk': book.id}))
+        return HttpResponseRedirect(reverse('book-detail', kwargs={'pk': book.id}))
+    
 
-@login_required
-def save_book(request, pk):
-    book = get_object_or_404(Book, id=pk)
 
-    if request.method == 'POST':
-        book_id = book.id
-        book
-    return HttpResponseRedirect(reverse('book-detail', kwargs={'pk': book.id}))
+class SaveBookView(LoginRequiredMixin, View):
+    login_url = reverse_lazy('login')
+
+    def post(self, request, pk):
+        book = Book.objects.get(id=pk)
+        if request.user in book.saved_by.all():
+            book.saved_by.remove(request.user)
+            book.save()
+        else:
+            book.saved_by.add(request.user)
+            book.save()
+        return HttpResponseRedirect(reverse('book-detail', kwargs={'pk': book.id}))
 
 
 

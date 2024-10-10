@@ -14,6 +14,12 @@
         <hr>
     {% endfor %}
 
+    <br><hr>
+    <h2>User's Saved Books</h2>
+    {% for book in user.saved_books.all %}
+        <p>{{book.title}}</p>
+    {% endfor %}
+
     {% if request.user.is_authenticated == True %}
     <form method="post" action="{% url 'logout'%}">
         {% csrf_token %}

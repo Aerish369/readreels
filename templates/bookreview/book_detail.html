@@ -21,10 +21,15 @@
                 <hr>
 
                 <!-- Save Book Button -->
-                <form method="POST" action="{% url 'save-book' book.pk %}" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary mb-3">Save Book</button>
-                </form>
+                
+                    <form method="POST" action="{% url 'save-book' book.pk %}" style="display:inline;">
+                        {% csrf_token %}
+                        {% if is_saved %} 
+                            <button type="submit" class="btn btn-danger mb-3">Unsave Book </button>
+                        {% else %}
+                            <button type="submit" class="btn btn-primary mb-3">Save Book </button>
+                        {% endif %}
+                    </form>
 
                 <h2>Reviews</h2><br>
                 <form method="POST" class="form-inline mb-4" id="review-form">
