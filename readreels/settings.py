@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'django_filters',
 
     'bookreview.apps.BookreviewConfig',
     'users.apps.UsersConfig',

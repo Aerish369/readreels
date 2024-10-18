@@ -1,10 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models.query import QuerySet
 from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, UpdateView, DetailView, View
 from typing import Any
 
+from .filters import BookFilter
 from .models import Book, Profile, Review
 from .forms import ProfileForm, UserProfileForm, ReviewForm
 
@@ -14,7 +16,19 @@ class HomeView(ListView):
     model = Book
     template_name = 'bookreview/home.html'
     context_object_name = 'books'
+    
+    def get(self, request, *args, **kwargs):
+        books = Book.objects.all()
+        book_filter = BookFilter(request.GET, queryset=books)
+        self.object_list = book_filter.qs
 
+        context = self.get_context_data(**kwargs)
+        context['book_filter'] = book_filter
+        context['books'] = book_filter.qs
+        return self.render_to_response(context)
+
+    
+    
 
 
 class BookDetailView(LoginRequiredMixin, DetailView, UpdateView):

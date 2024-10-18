@@ -1,31 +1,32 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
+<h2>Home</h2>
 
-{% block content %}
-    <h2>Home</h2>
+<p>Logged in as {{request.user}}</p>
+<hr />
+<br />
 
-    <p>Logged in as {{request.user}}</p>
-    <hr>
-    <br>
+<h3>Books</h3>
+<hr />
+{% for book in books %}
+<h5><a href="{% url 'book-detail' book.id %}">{{book.title}}</a></h5>
+<hr />
+{% endfor %}
 
-    <h3>Books</h3>
-    <hr>
-    {% for book in books %}
-        <h5><a href="{% url 'book-detail' book.id %}">{{book.title}}</a></h5>
-        <hr>
-    {% endfor %}
+<br />
+<hr />
+<h2>User's Saved Books</h2>
+{% for book in user.saved_books.all %}
+<p>{{book.title}}</p>
+{% endfor %}
 
-    <br><hr>
-    <h2>User's Saved Books</h2>
-    {% for book in user.saved_books.all %}
-        <p>{{book.title}}</p>
-    {% endfor %}
+<form method="GET">
+  <div>{{book_filter.form}}</div>
+  <button type="submit">Submit</button>
+</form>
 
-    {% if request.user.is_authenticated == True %}
-    <form method="post" action="{% url 'logout'%}">
-        {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
-    {% endif %}
-    
-
-{% endblock %}
+{% if request.user.is_authenticated == True %}
+<form method="post" action="{% url 'logout'%}">
+  {% csrf_token %}
+  <button type="submit">Logout</button>
+</form>
+{% endif %} {% endblock %}
