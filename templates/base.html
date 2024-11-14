@@ -1,55 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Base Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readreels</title>
+    {% block style %}
+    {% endblock %}
+  </head>
+  <body>
 
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
-      crossorigin="anonymous"
-    />
-    <style>
-      body {
-          background-color: #f8f9fa;
-      }
-      .col-centered {
-          text-align: center;
-      }
-      .messages {
-          margin: 20px 0;
-      }
-      .message {
-          padding: 10px;
-          margin: 10px 0;
-          border-radius: 5px;
-      }
-    </style>
-</head>
-<body>
+      <div class="container">
+          <div class="nav">
+            <div class="logo">ReadReels</div>
 
-<div class="container mt-5">
-    {% if messages %}
-        <div class="alert alert-info" role="alert">
+            <div class="search">
+                <form method="GET">
+                    <div>{{book_filter.form}}</div>
+                    <button type="submit">Search</button>
+                  </form>
+          </div>
+          <ul>
+              <li><a href="main.html">Home</a></li>
+              <li><a href="About.html">About</a></li>
+              <li><a href="#">Contact</a></li>
+          </ul>
+      </div>
+
+      <div class="message">
+          {% if messages %}
+          <div class="alert alert-info" role="alert">
             <ul class="list-unstyled messages">
-                {% for message in messages %}
-                    <li class="message{% if message.tags %} {{ message.tags }}{% endif %}">
-                        {{ message }}
-                    </li>
-                {% endfor %}
+              {% for message in messages %}
+              <li
+                class="message{% if message.tags %} {{ message.tags }}{% endif %}"
+              >
+                {{ message }}
+              </li>
+              {% endfor %}
             </ul>
-        </div>
-    {% endif %}
+          </div>
+          {% endif %}
+      </div>
+    
+     {% block content %} {% endblock %}
+  
 
-    {% block content %} {% endblock %}
-</div>
-
-<!-- Optional JavaScript -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-ZF93M8GpxwMAlh3U/g3zRjYETI4K6g1M2ERIZVylwNRVGk6/UV9ZNHwiBghZR4Km7" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-wXr5Pf0M5U5RZlOmd48B2Q5Ro6Y3DPS5F53uLPL1bOgaIO5Uq7W93U2vnSpfN67d" crossorigin="anonymous"></script>
 </body>
 </html>

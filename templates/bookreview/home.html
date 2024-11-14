@@ -1,28 +1,32 @@
-{% extends 'base.html' %} {% block content %}
-<h2>Home</h2>
+{% extends 'base.html' %} {% load static %} 
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'main.css' %}" />
+{% endblock %}
+
+{% block content %} 
+
 
 <p>Logged in as {{request.user}}</p>
 <hr />
 <br />
 
-<h3>Books</h3>
-<hr />
-{% for book in books %}
-<h5><a href="{% url 'book-detail' book.id %}">{{book.title}}</a></h5>
-<hr />
-{% endfor %}
+<div class="main">
+  {% for book in books %}
+  <div class="section">
+    <div class="grid">
+      {{book.title}}</a>
+      <a href="{% url 'book-detail' book.id %}">
+        <img src="{{ book.cover_image.url }}" alt="{{book.title}} " />
+      </a>
+      <h3>{{book.title}}</h3>
+      <p>{{book.description | slice:150}}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
 
-<br />
-<hr />
-<h2>User's Saved Books</h2>
-{% for book in user.saved_books.all %}
-<p>{{book.title}}</p>
-{% endfor %}
 
-<form method="GET">
-  <div>{{book_filter.form}}</div>
-  <button type="submit">Submit</button>
-</form>
 
 {% if request.user.is_authenticated == True %}
 <form method="post" action="{% url 'logout'%}">

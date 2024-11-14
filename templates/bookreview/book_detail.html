@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 
+{% load static %} 
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'main.css' %}" />
+{% endblock %}
+
+
 {% block content %}
 
 <div class="card mb-4">
