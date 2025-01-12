@@ -7,3 +7,9 @@ class BookFilter(django_filters.FilterSet):
     class Meta:
         model = Book
         fields = ['title']
+    
+    # def __init__(self, *args, **kwargs):
+    #     super(self.form, self).__init__(*args, **kwargs)
+
+    #     for name, field in self.fields.items():
+    #         field.widget.attrs.update({'class': 'form-control me-2'})

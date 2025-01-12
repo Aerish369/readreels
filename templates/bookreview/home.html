@@ -7,30 +7,64 @@
 {% block content %} 
 
 
-<p>Logged in as {{request.user}}</p>
-<hr />
-<br />
-
-<div class="main">
-  {% for book in books %}
-  <div class="section">
-    <div class="grid">
-      {{book.title}}</a>
-      <a href="{% url 'book-detail' book.id %}">
-        <img src="{{ book.cover_image.url }}" alt="{{book.title}} " />
-      </a>
-      <h3>{{book.title}}</h3>
-      <p>{{book.description | slice:150}}</p>
-    </div>
-  </div>
-  {% endfor %}
-</div>
-
-
-
-{% if request.user.is_authenticated == True %}
+<!-- {% if request.user.is_authenticated == True %}
 <form method="post" action="{% url 'logout'%}">
   {% csrf_token %}
   <button type="submit">Logout</button>
 </form>
-{% endif %} {% endblock %}
+{% endif %} -->
+
+  <!-- Header-->
+  <header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Deciding what to read next?</h1>
+            <p class="lead fw-normal text-white-50 mb-0">
+              You’re in the right place! Read what others think about the titles or rate the ones you’ve already read.</p>
+        </div>
+    </div>
+  </header>
+
+
+  <!-- Section-->
+  <section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+          {% for book in books %}
+           
+            <div class="col mb-5">
+              <div class="card h-100">
+                <!-- Product image-->
+                <a href="{% url 'book-detail' book.id %}">
+                  <img class="card-img-top" src="{{ book.cover_image.url }}" alt="{{book.title}}" />
+                </a>
+
+                
+                <!-- Product details-->
+                <!-- <div class="card-body p-4">
+                    <div class="text-center">
+                        Product name
+                        <h5 class="fw-bolder">{{book.title}}</h5>
+                        Product reviews
+                        <div class="d-flex justify-content-center small text-warning mb-2">
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                        </div>
+
+                        <p>{{book.description | slice:100}}</p>
+                    </div>
+                </div> -->
+                
+              </div>
+            </div>
+          {% endfor %}
+
+        </div>
+    </div>
+  </section>
+ 
+
+{% endblock %}
