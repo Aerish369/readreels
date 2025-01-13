@@ -38,15 +38,13 @@
                 <a href="{% url 'book-detail' book.id %}">
                   <img class="card-img-top" src="{{ book.cover_image.url }}" alt="{{book.title}}" />
                 </a>
-
-                
                 <!-- Product details-->
-                <!-- <div class="card-body p-4">
+                <div class="card-body p-4">
                     <div class="text-center">
-                        Product name
+                        <!-- Product name -->
                         <h5 class="fw-bolder">{{book.title}}</h5>
-                        Product reviews
-                        <div class="d-flex justify-content-center small text-warning mb-2">
+                        <!-- Product reviews -->
+                        <!-- <div class="d-flex justify-content-center small text-warning mb-2">
                             <div class="bi-star-fill"></div>
                             <div class="bi-star-fill"></div>
                             <div class="bi-star-fill"></div>
@@ -54,9 +52,9 @@
                             <div class="bi-star-fill"></div>
                         </div>
 
-                        <p>{{book.description | slice:100}}</p>
+                        <p>{{book.description | slice:100}}</p> -->
                     </div>
-                </div> -->
+                </div>
                 
               </div>
             </div>

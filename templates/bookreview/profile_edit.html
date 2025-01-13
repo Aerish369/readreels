@@ -1,16 +1,65 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'profile-edit.css' %}" />
+{% endblock %}
 
 {% block content %}
+    <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <img class="rounded-circle mt-5" width="150px" src="{{ profile.profile_image.url }}">
+                    <span class="font-weight-bold">{{user.first_name}}</span>
+                    <span class="text-black-50">{{user.email}}</span>
+                    <span> </span>
+                </div>
+            </div>
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h1 class="text-right">Profile Settings</h1>
+                    </div>
 
-    <h2>Profile Page</h2>
-
-    <form method = "POST" enctype="multipart/form-data">
-        {% csrf_token %}
-            {{user_form.as_p}}
-            {{profile_form.as_p}}
+                    <form method="POST" enctype="multipart/form-data">
+                        <!-- User Form (form for the user model) -->
+                        {% csrf_token %}
+                        {% for field in user_form %}
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <label for="{{ field.id_for_label }}" class="labels">{{ field.label }}</label>
+                                {{ field }}
+                                <!-- <input type="text" class="form-control" placeholder="enter phone number" value=""> -->
+                                
+                                {% if field.errors %}
+                                    <div class="error">{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        
+                        <!-- Profile Form (form for the profile form) -->
+                        {% for field in profile_form %}
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <label for="{{ field.id_for_label }}" class="labels">{{ field.label }}</label>
+                                {{ field }}
+                                <!-- <input type="text" class="form-control" placeholder="enter phone number" value=""> -->
+                                
+                                {% if field.errors %}
+                                    <div class="error">{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <div class="mt-5 text-center">
+                            <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         
-        <button type="submit">Save</button>
-    </form>
-
-
+        </div>
+    </div>
 {% endblock %}

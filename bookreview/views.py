@@ -118,6 +118,8 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['user_form'] = UserProfileForm(instance=self.request.user)
         context['profile_form'] = self.get_form()
+        context['user'] = self.request.user
+        context['profile'] = self.request.user.profile
         return context
     
     def post(self, request, *args, **kwargs):
