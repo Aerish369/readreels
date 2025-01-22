@@ -30,6 +30,12 @@ class Profile(models.Model):
     def email(self):
         return self.user.email
 
+    @property
+    def profile_image_url(self):
+        """Return the URL of the profile image, or default if not set."""
+        if self.profile_image and hasattr(self.profile_image, 'url'):
+            return self.profile_image.url
+        return '/media/users/images/author.jpg'
 
 
 class Author(models.Model):
