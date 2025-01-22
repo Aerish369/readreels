@@ -7,7 +7,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator, RegexVa
 class Profile(models.Model):
     birth_date = models.DateField(null=True, blank=True)
     bio = models.TextField()
-    profile_image = models.ImageField(upload_to='users/images', blank=True, default='')
+    profile_image = models.ImageField(upload_to='users/images', blank=True, default='users/images/author.jpg')
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -49,7 +49,7 @@ class Book(models.Model):
         max_length=13,
         validators=[RegexValidator(r'^\d{13}$', message='ISBN must be 13 digits long')]
         )
-    description = models.TextField()
+    description = models.TextField(max_length=500)
     saved_by = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='saved_books')
     cover_image = models.ImageField(upload_to='bookreview/images', blank=True, default='')
     tag = models.ForeignKey('Tag', on_delete=models.SET_NULL, null=True, related_name='books')

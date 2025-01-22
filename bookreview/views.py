@@ -36,8 +36,10 @@ class BookDetailView(LoginRequiredMixin, DetailView, UpdateView):
     model = Book
     template_name = 'bookreview/book_detail.html'
     login_url = reverse_lazy('login')
-
     form_class = ReviewForm
+
+    def get_object(self):
+        return get_object_or_404(Book, pk=self.kwargs['pk'])
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -56,6 +58,8 @@ class BookDetailView(LoginRequiredMixin, DetailView, UpdateView):
             
 
     def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
         book = self.get_object()
         user = self.request.user
 
@@ -72,6 +76,10 @@ class BookDetailView(LoginRequiredMixin, DetailView, UpdateView):
             review.book = book
             review.save()
             return redirect(request.path)
+        else:
+            # Debugging validation errors
+            print("Form Errors:", review_form.errors)
+            print("Cleaned Data:", review_form.cleaned_data)
         context = self.get_context_data(**kwargs)
         context['review_form'] = review_form  
         return self.render_to_response(context)

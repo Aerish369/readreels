@@ -3,7 +3,50 @@
 {% load static %} 
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'main.css' %}" />
+<link rel="stylesheet" href="{% static 'book-detail.css' %}" />
+<style>
+    .btn-custom {
+      background-color: #cd99cd;
+      border-color: #cd99cd;
+      color: #fff;
+    }
+
+    .btn-custom:hover {
+      background-color: #b377b3; 
+      border-color: #b377b3;
+    }
+
+    .btn-customm {
+        background-color: #212529;
+        color: white;
+    }
+
+    .btn-customm:hover {
+        /* background-color: #b377b3; */
+        border-color: black;
+    } 
+    .star-rating .star {
+        font-size: 1.5rem;
+        color: #ddd;
+        cursor: pointer;
+        transition: color 0.3s;
+    }
+
+    .star-rating input[type="radio"]:checked + .star,
+    .star-rating .star:hover,
+    .star-rating .star:hover ~ .star {
+        color: #ffc107;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 0.5rem;
+    }
+
+    .link-muted { color: #aaa; } .link-muted:hover { color: #1266f1; }
+
+  </style>
 {% endblock %}
 
 
@@ -13,85 +56,173 @@
     
     <div class="card-body">
         <div class="row">
-            <div class="col-md-4 text-center">
-                <img src="{{ book.cover_image.url }}" alt="Cover of {{ book.title }}" class="img-fluid" style="max-height: 300px; max-width: 100%;">
-            </div>
+            
             <div class="col-md-8">
-                <h1 class="card-title">{{ book.title }}</h1>
-                <h4 class="card-subtitle mb-2 text-muted">{{ book.author }}</h4>
-                <hr>
-                
-                <!-- Tag Styling -->
-                <h4 class="card-subtitle mb-2">
-                    <span class="badge badge-info py-2 px-3" style="font-size: 1.1rem;">{{ book.tag }}</span>
-                </h4>
-                <hr>
 
-                <!-- Save Book Button -->
-                
-                    <form method="POST" action="{% url 'save-book' book.pk %}" style="display:inline;">
-                        {% csrf_token %}
-                        {% if is_saved %} 
-                            <button type="submit" class="btn btn-danger mb-3">Unsave Book </button>
-                        {% else %}
-                            <button type="submit" class="btn btn-primary mb-3">Save Book </button>
-                        {% endif %}
-                    </form>
+                <section class="py-5">
+                    <div class="container px-4 px-lg-5 my-5">
+                        <div class="row gx-4 gx-lg-5 align-items-center">
+                            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{{ book.cover_image.url }}" alt="{{ book.title }}" /></div>
+                            <div class="col-md-6">
+                                <h1 class="display-5 fw-bolder">{{ book.title }}</h1>
+                                <div class="large mb-1">By {{ book.author }}</div><br/>
 
-                <h2>Reviews</h2><br>
-                <form method="POST" class="form-inline mb-4" id="review-form">
-                    {% csrf_token %}
-                    
-                    <!-- Star Rating -->
-                    <div class="form-group mr-2">
-                        <div class="star-rating d-flex">
-                            <input type="radio" name="rating" id="star1" value="1" {% if review_form.rating.value == 1 %}checked{% endif %} />
-                            <label for="star1" title="1 star">&#9733;</label>
-                            <input type="radio" name="rating" id="star2" value="2" {% if review_form.rating.value == 2 %}checked{% endif %} />
-                            <label for="star2" title="2 stars">&#9733;</label>
-                            <input type="radio" name="rating" id="star3" value="3" {% if review_form.rating.value == 3 %}checked{% endif %} />
-                            <label for="star3" title="3 stars">&#9733;</label>
-                            <input type="radio" name="rating" id="star4" value="4" {% if review_form.rating.value == 4 %}checked{% endif %} />
-                            <label for="star4" title="4 stars">&#9733;</label>
-                            <input type="radio" name="rating" id="star5" value="5" {% if review_form.rating.value == 5 %}checked{% endif %} />
-                            <label for="star5" title="5 stars">&#9733;</label>
+                                <button class="btn btn-custom" type="submit">{{ book.tag }}</button>
+                                
+                                <p class="lead">{{ book.description }}</p>
+                                
+                                <div class="d-flex">
+                                        <form method="POST" action="{% url 'save-book' book.pk %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            {% if is_saved %}
+                                                <button class="btn btn-customm flex-shrink-0" type="submit">
+                                                    Unsave Book
+                                                </button>
+                                            {% else %}
+                                                <button class="btn btn-outline-dark flex-shrink-0" type="submit" >
+                                                    Save Book
+                                                </button>
+                                            {% endif %}
+                                        </form>
+                                    </div>
+                            </div>
                         </div>
                     </div>
-                    
-                    <!-- Review Textarea -->
-                    <div class="form-group mr-2">
-                        <textarea name="review" class="form-control" placeholder="Write your review.." required>{{ review_form.review.value }}</textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        {% if is_reviewed %}
-                            Update Review
-                        {% else %}
-                            Submit Review
-                        {% endif %}
-                    </button>
-                </form>
+                </section>
                 
-                {% if is_reviewed %}
+                <div class="card shadow-sm p-4" style="position: relative; bottom: 185px; left: 644px; width: 80%;">
+                    <h2 class="mb-4">Rate and Review</h2>
+                    <form method="POST" id="review-form">
+                    {% csrf_token %}
+
+                        <!-- Star Rating -->
+                        <div class="mb-3">
+                            <label for="rating" class="form-label fw-bold">Your Rating</label>
+                            <div class="star-rating d-flex gap-1">
+                                <input type="radio" name="rating" id="star1" value="1" {% if review_form.rating.value == 1 %}checked{% endif %}>
+                                <label for="star1" class="star">&#9733;</label>
+                                <input type="radio" name="rating" id="star2" value="2" {% if review_form.rating.value == 2 %}checked{% endif %}>
+                                <label for="star2" class="star">&#9733;</label>
+                                <input type="radio" name="rating" id="star3" value="3" {% if review_form.rating.value == 3 %}checked{% endif %}>
+                                <label for="star3" class="star">&#9733;</label>
+                                <input type="radio" name="rating" id="star4" value="4" {% if review_form.rating.value == 4 %}checked{% endif %}>
+                                <label for="star4" class="star">&#9733;</label>
+                                <input type="radio" name="rating" id="star5" value="5" {% if review_form.rating.value == 5 %}checked{% endif %}>
+                                <label for="star5" class="star">&#9733;</label>
+                            </div>
+                        </div>
+
+                        <!-- Review Textarea -->
+                        <div class="mb-3">
+                            <label for="review" class="form-label fw-bold">Your Review</label>
+                            <textarea name="review" id="review" class="form-control" placeholder="Write your review..." rows="4" required>{{ review_form.review.value }}</textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary">
+                            {% if is_reviewed %}
+                                Update Review
+                            {% else %}
+                                Submit Review
+                            {% endif %}
+                        </button>
+
+                    </form>
+                    <!-- Delete Review Button -->
+                    {% if is_reviewed %}
                     <form method="POST" action="{% url 'delete-review' book.pk %}" style="display:inline;">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Delete Review</button>
+                        <button type="submit" class="btn btn-danger ms-2" style="position: relative; bottom: 38px; left: 150px;">Delete Review</button>
                     </form>
-                {% endif %}
+                    {% endif %}
+                </div>
 
-                <h3>User Reviews</h3>
-                {% if reviews %}
-                    {% for review in reviews %}
-                        <div class="border p-3 mb-3{% if review.reviewer == user.username %} bg-info text-white{% endif %}">
-                            <span class="font-weight-bold">{{ review.reviewer }}</span>
-                            <h5 class="mt-2">{{ review.rating }}/5</h5>
-                            <p>{{ review.review }}</p>
-                            <p class="text-muted">{{ review.review_date }}</p>
+
+
+
+
+                <div class="page-content page-container" id="page-content" style="position: relative; bottom: 196px; left: 543px; width: 96%;">
+                    <div class="padding">
+                        <div class="row d-flex justify-content-center">
+                            <!-- Make the author card span full width -->
+                            <div class="col-xl-10 col-md-12">
+                                <div class="card user-card-full">
+                                    <div class="row m-l-0 m-r-0">
+                                        <div class="col-sm-4 user-profile" style="background-color: #212529;">
+                                            <div class="card-block text-center text-white">
+                                                <h6 class="f-w-600" style="font-size: 1.5rem;">{{book.author}}</h6>
+                                                <i class="mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <div class="card-block">
+                                                <h6 class="m-b-20 p-b-5 b-b-default f-w-600">About the Author</h6>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <p class="m-b-10 f-w-600">{{book.author.bio}}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    {% endfor %}
-                {% else %}
-                    <p class="text-muted">No reviews yet. Be the first to review!</p>
-                {% endif %}
+                    </div>
+                </div>
+
+
+                <section style="position: relative; bottom: 278px; left: 529px; width: 98%;">
+                    <div class="container my-5 py-5">
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-md-12 col-lg-10">
+                            <div class="card text-body" >
+                                <div class="card-body p-4">
+                                <h4 class="mb-0">Recent comments</h4>
+                                <p class="fw-light mb-4 pb-2">Latest Comments section by users</p>
+
+                                {% if reviews %}
+                                    {% for review in reviews %}
+                                        <div class="card-body p-4">
+                                        <div class="d-flex flex-start">
+                                            <img class="rounded-circle shadow-1-strong me-3"
+                                            src="{{ reviw.reviewer.profile.profile_image.url }}" alt="avatar" width="60"
+                                            height="60" />
+                                            <div>
+                                            <h6 class="fw-bold mb-1">{{ review.reviewer }}</h6>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <p class="mb-0">
+                                                    {{ review.review_date }}
+                                                <span class="badge bg-success">{{ review.rating }}/5</span>
+                                                </p>
+                                            </div>
+                                            <p class="mb-0">
+                                                {{ review.review }}
+                                            </p>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        <hr class="my-0" />
+                                    {% endfor %}
+
+                                {% else %}
+                                    <div class="card-body p-4">
+                                        <div class="d-flex flex-start">
+                                            <div>
+                                            <h6 class="fw-bold mb-10">No Reviews yet. Be the first one to review.</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="my-0" />
+                                {% endif %}
+
+
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </section>
+
             </div>
         </div>
     </div>

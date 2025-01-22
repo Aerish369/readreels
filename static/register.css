@@ -36,13 +36,13 @@
 
 .signup-form input:focus {
     outline: none;
-    border-color: #7c3aed;
+    border-color: #212529;
 }
 
 .signup-button {
     width: 100%;
     padding: 10px;
-    background-color: #7c3aed;
+    background-color: #212529;
     color: #fff;
     font-size: 16px;
     font-weight: bold;
@@ -52,7 +52,10 @@
 }
 
 .signup-button:hover {
-    background-color: #5b21b6;
+    background-color: #cd99cd;
+    color: #212529;
+    /* border: none;
+    border-radius: 5px; */
 }
 
 .login-link {
@@ -62,7 +65,7 @@
 }
 
 .login-link a {
-    color: #7c3aed;
+    color: #212529;
     text-decoration: none;
 }
 

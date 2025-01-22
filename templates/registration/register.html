@@ -1,19 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-<!-- 
 
-    <h2>Sign up</h2>
-
-    <form method = "POST">
-        {% csrf_token %}
-        {% for fields in form %}
-            <label for="{{ fields.id_for_label }}">{{ fields.label }}</label>
-            {{ fields }}
-        {% endfor %}
-        <button type="submit">Sign Up</button>
-    </form>
-
--->
 {% block style %}
 <link rel="stylesheet" href="{% static 'register.css' %}" />
 {% endblock %}
