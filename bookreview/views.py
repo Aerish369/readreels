@@ -21,11 +21,13 @@ class HomeView(ListView):
         books = Book.objects.all()
         book_filter = BookFilter(request.GET, queryset=books)
         self.object_list = book_filter.qs
+        home=True
 
         # Giving BookFiltered Context to Template
         context = self.get_context_data(**kwargs)
         context['book_filter'] = book_filter
         context['books'] = book_filter.qs
+        context['home'] = home
         return self.render_to_response(context)
 
     

@@ -19,20 +19,27 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
+              <a class="nav-link" href="{% url 'about' %}">About</a>
             </li>
+            {% if request.user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href="#">Contact</a>
+              <a class="nav-link" href="{% url 'profile-edit' %}">Profile</a>
             </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+              </li>
+            {% endif %}
           </ul>
-          <form class="d-flex" role="search">
-            {{book_filter.form}}
-            <!-- <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"> -->
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
+          {% if home %}
+            <form class="d-flex" role="search">
+              {{book_filter.form}}
+              <button class="btn btn-outline-dark flex-shrink-0" type="submit">Search</button>
+            </form>
+          {% endif %}
         </div>
       </div>
     </nav>

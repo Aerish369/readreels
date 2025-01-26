@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="container-fluid p-5 text-white text-center hero-section">
+        <h1 class="display-4 fw-bold">About ReadReels</h1>
+        <p class="lead">Your ultimate destination for discovering, sharing, and celebrating books.</p>
+    </div>
+
+    <!-- About Section -->
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-6" style="position: relative; bottom: 95px; left: -25px;">
+                <img src="{% get_media_prefix %}bookreview/images/bookshelf.jpg" alt="Bookshelf" class="img-fluid rounded shadow-lg">
+            </div>
+            <div class="col-md-6">
+                <h2>What Is ReadReels?</h2>
+                <p>ReadReels is a social networking site tailored for book enthusiasts. It offers the perfect blend of community engagement and a vast book database. With ReadReels, users can explore, save, and discuss books with like-minded readers, all while enjoying premium features for free.</p>
+                <ul>
+                    <li>Connect with friends, authors, and a global community of book lovers.</li>
+                    <li>Discover detailed descriptions, reviews, and ratings for thousands of titles.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container my-5 py-5 bg-light rounded shadow">
+        <h2 class="text-center mb-4">Why Choose ReadReels?</h2>
+        <div class="row text-center">
+            <div class="col-md-4">
+                <i class="bi bi-book fs-1 text-primary"></i>
+                <h5 class="mt-3">Extensive Database</h5>
+                <p>Discover reviews, ratings, and detailed descriptions for thousands of books.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="bi bi-people fs-1 text-success"></i>
+                <h5 class="mt-3">Connect with Readers</h5>
+                <p>Join communities, interact with authors, and share your bookish adventures.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="bi bi-shield-check fs-1 text-danger"></i>
+                <h5 class="mt-3">Safe and Ad-Free</h5>
+                <p>A distraction-free, secure platform to make your reading journey seamless.</p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

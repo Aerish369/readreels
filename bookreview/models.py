@@ -57,7 +57,7 @@ class Book(models.Model):
         )
     description = models.TextField(max_length=500)
     saved_by = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='saved_books')
-    cover_image = models.ImageField(upload_to='bookreview/images', blank=True, default='')
+    cover_image = models.ImageField(upload_to='bookreview/images', blank=True, default='bookreview/images/default.jpg')
     tag = models.ForeignKey('Tag', on_delete=models.SET_NULL, null=True, related_name='books')
 
     def __str__(self) -> str:

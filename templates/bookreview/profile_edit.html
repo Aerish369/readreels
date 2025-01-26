@@ -7,10 +7,10 @@
 
 {% block content %}
     <div class="container rounded bg-white mt-5 mb-5">
-        <div class="row">
+        <div class="row" style="border: 1px solid black; border-radius: 8px;">
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <img class="rounded-circle mt-5" width="150px" src="{{ profile.profile_image.url }}">
+                    <img class="rounded-circle mt-5" width="150px" src="{{ profile.profile_image_url }}">
                     <span class="font-weight-bold">{{user.first_name}}</span>
                     <span class="text-black-50">{{user.email}}</span>
                     <span> </span>
@@ -57,6 +57,12 @@
                             <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
                         </div>
                     </form>
+                    {% if request.user.is_authenticated == True %}
+                        <form method="post" action="{% url 'logout'%}">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                        </form>
+                    {% endif %}
                 </div>
             </div>
         
