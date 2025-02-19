@@ -1,0 +1,64 @@
+{% extends 'base.html' %} {% load static %} 
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'main.css' %}" />
+{% endblock %}
+
+{% block content %} 
+
+  <header class="bg-dark py-5"> 
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Find your saved books here</h1>
+            <p class="lead fw-normal text-white-50 mb-0">
+              </p>
+        </div>
+    </div>
+  </header>
+
+  <!-- Section-->
+  <section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% if saved_books %}
+            {% for book in saved_books %}
+            
+                <div class="col mb-5">
+                <div class="card h-100">
+                    <!-- Product image-->
+                    <a href="{% url 'book-detail' book.id %}">
+                    <img class="card-img-top" src="{{ book.cover_image.url }}" alt="{{book.title}}" />
+                    </a>
+                    <!-- Product details-->
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <!-- Product name -->
+                            <h5 class="fw-bolder">{{book.title}}</h5>
+                        </div>
+                    </div>
+                    
+                </div>
+                </div>
+            {% endfor %}
+            {% else %}
+            <div class="col mb-5">
+                <div class="card h-100">
+         
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <!-- Product name -->
+                            <h5 class="fw-bolder">Oops! There are no saved books.</h5>
+                            <p class="text-muted">Save some books to see them here.</p>
+                        </div>
+                    </div>
+                    
+                </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+  </section>
+ 
+
+{% endblock %}

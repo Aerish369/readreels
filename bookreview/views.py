@@ -9,6 +9,7 @@ from typing import Any
 from .filters import BookFilter
 from .models import Book, Profile, Review
 from .forms import ProfileForm, UserProfileForm, ReviewForm
+from django.shortcuts import render
 
 
 
@@ -143,3 +144,8 @@ class ProfileView(LoginRequiredMixin, UpdateView):
             return redirect(self.success_url)
         
         return self.get(request, *args, **kwargs)
+    
+def saved_books(request):
+    user = request.user
+    saved_books = user.saved_books.all()
+    return render(request, 'bookreview/saved_books.html', {'saved_books': saved_books})
