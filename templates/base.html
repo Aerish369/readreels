@@ -25,9 +25,19 @@
               <a class="nav-link" href="{% url 'about' %}">About</a>
             </li>
             {% if request.user.is_authenticated %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'profile-edit' %}">Profile</a>
-            </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'profile-edit' %}">Profile</a>
+              </li>
+            
+              <!-- <a class="nav-link" href="{% url 'profile-edit' %}">Profile</a> -->
+              
+              <li class="nav-item">
+                <form method="post" action="{% url 'logout'%}">
+                  {% csrf_token %}
+                    <button class="nav-link btn btn-link " style="background: none; ">Logout</button>
+                    <!-- <a type="submit" class="p-0 border-0" style="">Logout</a> -->
+                  </form>
+              </li>
             {% else %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'login' %}">Login</a>
